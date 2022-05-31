@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Хранилище GoodsAccountingModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="ВидыПродуктов">
+    <Key>
+      <PropertyRef Name="Код_ВидПродукта" />
+    </Key>
+    <Property Name="Код_ВидПродукта" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Вид_Продукта" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Должности">
+    <Key>
+      <PropertyRef Name="Код_Должности" />
+    </Key>
+    <Property Name="Код_Должности" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Должность" Type="nvarchar" MaxLength="50" />
+    <Property Name="Уровень_Доступа" Type="int" />
+  </EntityType>
+  <EntityType Name="ДоставкаТовараВМагазин">
+    <Key>
+      <PropertyRef Name="Код_Доставки" />
+    </Key>
+    <Property Name="Код_Доставки" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Дата_Доставки" Type="date" />
+    <Property Name="Код_Товара" Type="int" Nullable="false" />
+    <Property Name="Количество_Товара" Type="int" />
+    <Property Name="Код_Доставщика" Type="int" />
+    <Property Name="Ед_изм" Type="nvarchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="КомпанииДоставщики">
+    <Key>
+      <PropertyRef Name="Код_Доставщика" />
+    </Key>
+    <Property Name="Код_Доставщика" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Название_Компании" Type="nvarchar" MaxLength="50" />
+    <Property Name="Адрес" Type="nvarchar" MaxLength="50" />
+    <Property Name="Телефон" Type="nvarchar" MaxLength="12" />
+  </EntityType>
+  <EntityType Name="КомпанииПоставщики">
+    <Key>
+      <PropertyRef Name="Код_Поставщика" />
+    </Key>
+    <Property Name="Код_Поставщика" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Название_Компании" Type="nvarchar" MaxLength="50" />
+    <Property Name="Адрес" Type="nvarchar" MaxLength="50" />
+    <Property Name="Телефон" Type="nvarchar" MaxLength="12" />
+  </EntityType>
+  <EntityType Name="Пользователи">
+    <Key>
+      <PropertyRef Name="Код_Работника" />
+    </Key>
+    <Property Name="Код_Работника" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Логин" Type="nvarchar" MaxLength="50" />
+    <Property Name="Пароль" Type="nvarchar" MaxLength="8" />
+    <Property Name="ФИО" Type="nvarchar(max)" />
+    <Property Name="Код_Должности" Type="int" />
+    <Property Name="Раб_Телефон" Type="nvarchar" MaxLength="12" />
+  </EntityType>
+  <EntityType Name="ПоставкиНаСклад">
+    <Key>
+      <PropertyRef Name="Код_Поставки" />
+    </Key>
+    <Property Name="Код_Поставки" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Дата_Поставки" Type="date" />
+    <Property Name="Код_Товара" Type="int" Nullable="false" />
+    <Property Name="Код_Поставщика" Type="int" />
+    <Property Name="Количество_Товара" Type="int" />
+    <Property Name="Ед_изм" Type="nvarchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="ТоварыНаСкладе">
+    <Key>
+      <PropertyRef Name="Код_Товара" />
+    </Key>
+    <Property Name="Код_Товара" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Название_Товара" Type="nvarchar" MaxLength="50" />
+    <Property Name="Ед_изм" Type="nvarchar" MaxLength="10" />
+    <Property Name="Количество_Товара" Type="int" />
+    <Property Name="Цена" Type="int" />
+    <Property Name="Годен_до" Type="date" />
+    <Property Name="Код_ВидПродукта" Type="int" />
+  </EntityType>
+  <Association Name="FK_ДоставкаТовараВМагазин_КомпанииДоставщики">
+    <End Role="КомпанииДоставщики" Type="Self.КомпанииДоставщики" Multiplicity="0..1" />
+    <End Role="ДоставкаТовараВМагазин" Type="Self.ДоставкаТовараВМагазин" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="КомпанииДоставщики">
+        <PropertyRef Name="Код_Доставщика" />
+      </Principal>
+      <Dependent Role="ДоставкаТовараВМагазин">
+        <PropertyRef Name="Код_Доставщика" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ДоставкаТовараВМагазин_ТоварыНаСкладе">
+    <End Role="ТоварыНаСкладе" Type="Self.ТоварыНаСкладе" Multiplicity="1" />
+    <End Role="ДоставкаТовараВМагазин" Type="Self.ДоставкаТовараВМагазин" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ТоварыНаСкладе">
+        <PropertyRef Name="Код_Товара" />
+      </Principal>
+      <Dependent Role="ДоставкаТовараВМагазин">
+        <PropertyRef Name="Код_Товара" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Пользователи_Должности">
+    <End Role="Должности" Type="Self.Должности" Multiplicity="0..1" />
+    <End Role="Пользователи" Type="Self.Пользователи" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Должности">
+        <PropertyRef Name="Код_Должности" />
+      </Principal>
+      <Dependent Role="Пользователи">
+        <PropertyRef Name="Код_Должности" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Поставки_Поставщики">
+    <End Role="КомпанииПоставщики" Type="Self.КомпанииПоставщики" Multiplicity="0..1" />
+    <End Role="ПоставкиНаСклад" Type="Self.ПоставкиНаСклад" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="КомпанииПоставщики">
+        <PropertyRef Name="Код_Поставщика" />
+      </Principal>
+      <Dependent Role="ПоставкиНаСклад">
+        <PropertyRef Name="Код_Поставщика" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Поставки_ТоварыНаСкладе">
+    <End Role="ТоварыНаСкладе" Type="Self.ТоварыНаСкладе" Multiplicity="1" />
+    <End Role="ПоставкиНаСклад" Type="Self.ПоставкиНаСклад" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ТоварыНаСкладе">
+        <PropertyRef Name="Код_Товара" />
+      </Principal>
+      <Dependent Role="ПоставкиНаСклад">
+        <PropertyRef Name="Код_Товара" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ТоварыНаСкладе_ВидыПродуктов">
+    <End Role="ВидыПродуктов" Type="Self.ВидыПродуктов" Multiplicity="0..1" />
+    <End Role="ТоварыНаСкладе" Type="Self.ТоварыНаСкладе" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ВидыПродуктов">
+        <PropertyRef Name="Код_ВидПродукта" />
+      </Principal>
+      <Dependent Role="ТоварыНаСкладе">
+        <PropertyRef Name="Код_ВидПродукта" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Хранилище GoodsAccountingModelContainer">
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ВидыПродуктов" EntityType="Self.ВидыПродуктов" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Должности" EntityType="Self.Должности" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ДоставкаТовараВМагазин" EntityType="Self.ДоставкаТовараВМагазин" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="КомпанииДоставщики" EntityType="Self.КомпанииДоставщики" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="КомпанииПоставщики" EntityType="Self.КомпанииПоставщики" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Пользователи" EntityType="Self.Пользователи" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ПоставкиНаСклад" EntityType="Self.ПоставкиНаСклад" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ТоварыНаСкладе" EntityType="Self.ТоварыНаСкладе" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_ДоставкаТовараВМагазин_КомпанииДоставщики" Association="Self.FK_ДоставкаТовараВМагазин_КомпанииДоставщики">
+      <End Role="КомпанииДоставщики" EntitySet="КомпанииДоставщики" />
+      <End Role="ДоставкаТовараВМагазин" EntitySet="ДоставкаТовараВМагазин" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ДоставкаТовараВМагазин_ТоварыНаСкладе" Association="Self.FK_ДоставкаТовараВМагазин_ТоварыНаСкладе">
+      <End Role="ТоварыНаСкладе" EntitySet="ТоварыНаСкладе" />
+      <End Role="ДоставкаТовараВМагазин" EntitySet="ДоставкаТовараВМагазин" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Пользователи_Должности" Association="Self.FK_Пользователи_Должности">
+      <End Role="Должности" EntitySet="Должности" />
+      <End Role="Пользователи" EntitySet="Пользователи" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Поставки_Поставщики" Association="Self.FK_Поставки_Поставщики">
+      <End Role="КомпанииПоставщики" EntitySet="КомпанииПоставщики" />
+      <End Role="ПоставкиНаСклад" EntitySet="ПоставкиНаСклад" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Поставки_ТоварыНаСкладе" Association="Self.FK_Поставки_ТоварыНаСкладе">
+      <End Role="ТоварыНаСкладе" EntitySet="ТоварыНаСкладе" />
+      <End Role="ПоставкиНаСклад" EntitySet="ПоставкиНаСклад" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ТоварыНаСкладе_ВидыПродуктов" Association="Self.FK_ТоварыНаСкладе_ВидыПродуктов">
+      <End Role="ВидыПродуктов" EntitySet="ВидыПродуктов" />
+      <End Role="ТоварыНаСкладе" EntitySet="ТоварыНаСкладе" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
